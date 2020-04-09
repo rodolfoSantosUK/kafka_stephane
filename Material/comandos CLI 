@@ -9,3 +9,7 @@ sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --dele
 
 Descrevendo o topico
 sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --describe
+
+CONSOLE:
+
+sudo ./bin/kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic first_topic
