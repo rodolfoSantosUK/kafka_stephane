@@ -1,0 +1,11 @@
+sudo ./bin/zookeeper-server-start.sh ./config/zookeeper.properties
+sudo ./bin/kafka-server-start.sh ./config/server.properties
+
+Criando o topico
+sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --create --partitions 3 --replication-factor 1
+
+Deletando topico
+sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --delete
+
+Descrevendo o topico
+sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --describe
