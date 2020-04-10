@@ -2,14 +2,31 @@ sudo ./bin/zookeeper-server-start.sh ./config/zookeeper.properties
 sudo ./bin/kafka-server-start.sh ./config/server.properties
 
 Criando o topico
-sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --create --partitions 3 --replication-factor 1
+sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic FIRST_TOPIC --create --partitions 3 --replication-factor 1
 
 Deletando topico
-sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --delete
+sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic FIRST_TOPIC --delete
 
 Descrevendo o topico
-sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic first_topic --describe
+sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --topic FIRST_TOPIC --describe
+
+Listando os topicos
+sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2180 --list --describe
 
 CONSOLE:
 
-sudo ./bin/kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic first_topic
+sudo ./bin/kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic FIRST_TOPIC
+
+
+CONSUMER:
+sudo ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic FIRST_TOPIC
+
+CONSUMER GROUPS:
+
+sudo ./bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic FIRST_TOPIC --group MY_FIRST_CONSUMER
+
+Lista todos
+sudo ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --list
+
+Describe no grupo
+sudo ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --describe --group MY_FIRST_CONSUMER
