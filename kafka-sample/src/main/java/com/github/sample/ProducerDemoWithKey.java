@@ -20,13 +20,13 @@ public class ProducerDemoWithKey {
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        for (int i=100; i <= 1000; i++) {
+        for (int i=0; i <= 50; i++) {
 
-            String topic = "FIRST_TOPIC" ;
+            String topic = "twitter-tweets" ;
             String value = "Mensagem " + Integer.toString(i);
             String key = "Key " + Integer.toString(i);
 
-            ProducerRecord<String, String> record =  new ProducerRecord<String, String>("FIRST_TOPIC", key, key);
+            ProducerRecord<String, String> record =  new ProducerRecord<String, String>(topic, key, key);
 
             KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
             producer.send(record, new Callback() {
