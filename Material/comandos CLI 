@@ -14,7 +14,6 @@ Listando os topicos
 sudo ./bin/kafka-topics.sh --zookeeper 127.0.0.1:2180 --list --describe
 
 CONSOLE:
-
 sudo ./bin/kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic FIRST_TOPIC
 
 
@@ -29,4 +28,10 @@ Lista todos
 sudo ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --list
 
 Describe no grupo
-sudo ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --describe --group MY_FIRST_CONSUMER
+sudo ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --describe --group MY_FOURTH-APPLICATION
+
+Restando offset
+
+sudo ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --group kafka-demo-elasticsearch --describe
+
+sudo ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --group kafka-demo-elasticsearch --reset-offsets --to-earliest --topic twitter-tweets --execute
