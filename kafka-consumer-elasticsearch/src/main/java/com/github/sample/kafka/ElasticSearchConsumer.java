@@ -13,6 +13,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestClient;
@@ -65,7 +67,7 @@ public class ElasticSearchConsumer {
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         // Quantidade máxima de registros por requisição
-        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "20");
+        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "50");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
         consumer.subscribe(Arrays.asList(topic));
@@ -81,22 +83,25 @@ public class ElasticSearchConsumer {
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
             logger.info("Recebeu " + records.count() + " registros");
-        for (ConsumerRecord record : records ) {
-            IndexRequest indexReq = new IndexRequest(
+            BulkRequest bulkRequest = new BulkRequest();
+            Integer recordCount = records.count();
+            for (ConsumerRecord record : records) {
+                IndexRequest indexReq = new IndexRequest(
                         "twitter"
                 ).source(record.value(), XContentType.JSON);
-
-                IndexResponse indexResp = client.index(indexReq, RequestOptions.DEFAULT);
-                logger.info(indexResp.getId());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                bulkRequest.add(indexReq);
+            }
+          if(recordCount > 0) {
+                BulkResponse bulkItemResponses = client.bulk(bulkRequest, RequestOptions.DEFAULT);
+                  logger.info("Comitando os offsets ... ");
+                  consumer.commitSync();
+                  logger.info("Offsets foram commitados ... ");
+                  try {
+                      Thread.sleep(1000);
+                  } catch (InterruptedException e) {
+                      e.printStackTrace();
                 }
-             }
-            logger.info("Comitando os offsets ... ");
-            consumer.commitSync();
-            logger.info("Offsets foram commitados ... ");
          }
-    }
+      }
+   }
 }
